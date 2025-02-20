@@ -9,6 +9,7 @@ from django.views.generic import ListView
 from django.http import JsonResponse 
 from django.core.paginator import Paginator
 from django.http import QueryDict
+from .utils import verificar_whatsapp
 # Create your views here.
 
 def authenticate_user(request):
@@ -80,6 +81,7 @@ class BuscaAvancadaView(ListView):
     context_object_name = "dados" 
     paginate_by = 10
 
+
     def get(self,request,*agrs,**kwargs):
         form = CreateFormBuscaAvancada(request.GET)  # Mudamos para GET
         page_list = request.GET.getlist("page")
@@ -126,8 +128,20 @@ class BuscaAvancadaView(ListView):
                     #print("Total de Registros:", total_dados)
                     #print("Dados Paginados:", dados_paginados)
                     dados = response.json()
+
                     total_dados = dados.get("total", 0)  
-                    dados_paginados = dados.get("cnpjs", [])  
+                    dados_paginados = dados.get("cnpjs", []) 
+                    #passar por cada empresa em dados
+                    for empresa in dados_paginados:
+                        contatos = empresa.get("contato_telefonico") # pega a chave contato_telefonico referente a todos os resultados
+                        empresa['whatsapp'] = []
+                        for contato in contatos: # passa por cada um
+                            telefone = contato.get("completo") # pega cada telefone
+                            if telefone:
+                                empresa['whatsapp'].append({
+                                    "telefone":telefone,
+                                    "whatsapp":verificar_whatsapp(telefone)
+                                })
                     total_paginas = (total_dados // resultados_por_pagina) + (1 if total_dados % resultados_por_pagina else 0)
                         
                     if page > total_paginas:
@@ -152,9 +166,9 @@ class BuscaAvancadaView(ListView):
                     }
                     return render(request,self.template_name,context)
                 else:
-                    return render(request, self.template_name, {"error": "Erro na requisição à API"})               
+                    return render(request, self.template_name, {f"{response.status_code}":f"{response.text}"})               
             except requests.exceptions.RequestException as e:
-                print("Erro na requisição:", e)
+                print("Erro na requisição:", response.text)
                 return []
     
     def get_context_data(self, **kwargs):
