@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'projeto_busca_cnpjs.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'site_cnpjs',
+        'NAME': 'cnpjs_db',
         'USER':'postgres',
-        'PASSWORD':'1922',
+        'PASSWORD':'p1922',
         'HOST':'localhost',
         'PORT':'5432'
     }
@@ -122,7 +122,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

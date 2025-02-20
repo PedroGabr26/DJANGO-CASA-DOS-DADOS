@@ -1,0 +1,142 @@
+{% extends "home.html" %}
+
+<title>{% block title %}Document{% endblock %}</title>
+
+{% block content %}
+    <body>
+        <div>
+        <p>Busca de cnpj</p>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Pesquisar</button>
+            </form>
+
+            {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+            {% endif %}
+            
+            {% if dados_cnpj %}
+                <h3>Dados da Empresa</h3>
+
+                <div class="campo">CNPJ:</div>
+                <div class="valor">{{ dados_cnpj.cnpj }}</div>
+
+                <div class="campo">CNPJ Raiz:</div>
+                <div class="valor">{{ dados_cnpj.cnpj_raiz }}</div>
+
+                <div class="campo">Filial Número:</div>
+                <div class="valor">{{ dados_cnpj.filial_numero }}</div>
+
+                <div class="campo">Razão Social:</div>
+                <div class="valor">{{ dados_cnpj.razao_social }}</div>
+
+                <div class="campo">Nome Fantasia:</div>
+                <div class="valor">{{ dados_cnpj.nome_fantasia }}</div>
+
+                <h3>Qualificação Responsável</h3>
+                <div class="campo">Código:</div>
+                <div class="valor">{{ dados_cnpj.qualificacao_responsavel.codigo }}</div>
+                <div class="campo">Descrição:</div>
+                <div class="valor">{{ dados_cnpj.qualificacao_responsavel.descricao }}</div>
+
+                <h3>Porte da Empresa</h3>
+                <div class="campo">Código:</div>
+                <div class="valor">{{ dados_cnpj.porte_empresa.codigo }}</div>
+                <div class="campo">Descrição:</div>
+                <div class="valor">{{ dados_cnpj.porte_empresa.descricao }}</div>
+
+                <div class="campo">Matriz ou Filial:</div>
+                <div class="valor">{{ dados_cnpj.matriz_filial }}</div>
+
+                <div class="campo">Código Natureza Jurídica:</div>
+                <div class="valor">{{ dados_cnpj.codigo_natureza_juridica }}</div>
+
+                <div class="campo">Descrição Natureza Jurídica:</div>
+                <div class="valor">{{ dados_cnpj.descricao_natureza_juridica }}</div>
+
+                <h3>Situação Cadastral</h3>
+                <div class="campo">Status:</div>
+                <div class="valor">{{ dados_cnpj.situacao_cadastral.situacao_cadastral }}</div>
+                <div class="campo">Motivo:</div>
+                <div class="valor">{{ dados_cnpj.situacao_cadastral.motivo }}</div>
+                <div class="campo">Data:</div>
+                <div class="valor">{{ dados_cnpj.situacao_cadastral.data }}</div>
+
+                <h3>Endereço</h3>
+                <div class="campo">CEP:</div>
+                <div class="valor">{{ dados_cnpj.endereco.cep }}</div>
+                <div class="campo">Logradouro:</div>
+                <div class="valor">{{ dados_cnpj.endereco.tipo_logradouro }} {{ dados_cnpj.endereco.logradouro }}</div>
+                <div class="campo">Número:</div>
+                <div class="valor">{{ dados_cnpj.endereco.numero }}</div>
+                <div class="campo">Complemento:</div>
+                <div class="valor">{{ dados_cnpj.endereco.complemento }}</div>
+                <div class="campo">Bairro:</div>
+                <div class="valor">{{ dados_cnpj.endereco.bairro }}</div>
+                <div class="campo">UF:</div>
+                <div class="valor">{{ dados_cnpj.endereco.uf }}</div>
+                <div class="campo">Município:</div>
+                <div class="valor">{{ dados_cnpj.endereco.municipio }}</div>
+
+                <h3>IBGE</h3>
+                <div class="campo">Código Município:</div>
+                <div class="valor">{{ dados_cnpj.endereco.ibge.codigo_municipio }}</div>
+                <div class="campo">Código UF:</div>
+                <div class="valor">{{ dados_cnpj.endereco.ibge.codigo_uf }}</div>
+                <div class="campo">Latitude:</div>
+                <div class="valor">{{ dados_cnpj.endereco.ibge.latitude }}</div>
+                <div class="campo">Longitude:</div>
+                <div class="valor">{{ dados_cnpj.endereco.ibge.longitude }}</div>
+
+                <div class="campo">Data de Abertura:</div>
+                <div class="valor">{{ dados_cnpj.data_abertura }}</div>
+
+                <div class="campo">Capital Social:</div>
+                <div class="valor">R$ {{ dados_cnpj.capital_social }}</div>
+
+                <h3>Situação Especial</h3>
+                <div class="campo">Descrição:</div>
+                <div class="valor">{{ dados_cnpj.situacao_especial.descricao }}</div>
+                <div class="campo">Data:</div>
+                <div class="valor">{{ dados_cnpj.situacao_especial.data }}</div>
+
+            <h3>Quadro Societário</h3>
+                {% for socio in dados_cnpj.quadro_societario %}
+                    <div class="campo">Nome:</div>
+                    <div class="valor">{{ socio.nome }}</div>
+
+                    <div class="campo">Qualificação:</div>
+                    <div class="valor">{{ socio.qualificacao_socio }}</div>
+
+                    <div class="campo">Documento:</div>
+                    <div class="valor">{{ socio.documento }}</div>
+
+                    <div class="campo">Data de Entrada na Sociedade:</div>
+                    <div class="valor">{{ socio.data_entrada_sociedade }}</div>
+
+                    <div class="campo">País:</div>
+                    <div class="valor">{{ socio.pais_socio }}</div>
+
+                    <div class="campo">CPF do Representante Legal:</div>
+                    <div class="valor">{{ socio.cpf_representante_legal }}</div>
+
+                    <div class="campo">Nome do Representante Legal:</div>
+                    <div class="valor">{{ socio.nome_representante_legal }}</div>
+
+                    <div class="campo">Qualificação do Representante Legal:</div>
+                    <div class="valor">{{ socio.qualificacao_representante_legal }}</div>
+
+                    <div class="campo">Faixa Etária:</div>
+                    <div class="valor">{{ socio.faixa_etaria_descricao }}</div>
+
+                    <hr>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </body>
+{% endblock %}

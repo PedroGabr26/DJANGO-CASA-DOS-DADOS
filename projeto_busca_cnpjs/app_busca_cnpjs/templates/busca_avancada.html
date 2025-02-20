@@ -1,0 +1,60 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Busca Avançada</h2>
+
+    <form method="GET">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Buscar</button>
+    </form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if dados %}
+        <h3>Resultados:</h3>
+        {% for item in dados %}
+            <div class="result-box">
+                <p><strong>CNPJ:</strong> {{ item.cnpj }}</p>
+                <p><strong>Nome:</strong> {{ item.nome_fantasia }}</p>
+                <p><strong>Atividade:</strong> {{ item.atividade_principal }}</p>
+                <p>{{  "-"|rjust:60 }}</p>
+            </div>
+        {% endfor %}
+
+        <!-- Paginação -->
+        {% if is_paginated %}
+            <div class="pagination">
+                <!-- Primeira Página -->
+                <a href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <button>Primeira</button>
+                </a>
+
+                <!-- Página Anterior -->
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        <button>Anterior</button>
+                    </a>
+                {% endif %}
+
+                <!-- Número da Página Atual -->
+                <span>Página {{ page_obj.number }} de {{ paginator.num_pages }}</span>
+
+                <!-- Próxima Página -->
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        <button>Próxima</button>
+                    </a>
+                {% endif %}
+
+                <!-- Última Página -->
+                <a href="?page={{ paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <button>Última</button>
+                </a>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

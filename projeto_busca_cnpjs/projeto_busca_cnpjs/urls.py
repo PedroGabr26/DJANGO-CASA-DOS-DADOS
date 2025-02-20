@@ -19,6 +19,9 @@ from django.urls import path
 from app_busca_cnpjs import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/',views.login,name='login'),
-    path('create/', views.create_user,name='create_user')
+    path('',views.authenticate_user,name='login'),
+    path('create/', views.create_user,name='create_user'),
+    path('home/',views.home,name='home'),
+    path('cnpj/',views.busca_cnpj,name='cnpj'),
+    path('busca_avancada/',views.BuscaAvancadaView.as_view(),name='busca_avancada')
 ]

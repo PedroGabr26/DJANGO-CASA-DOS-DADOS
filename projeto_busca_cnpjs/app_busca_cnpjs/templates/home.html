@@ -1,11 +1,29 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/estilo.css' %}">
+    <title>{% block title %}Home{% endblock %}</title>
 </head>
 <body>
-    <p>Página home</p>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/home/' %}active{% endif %}" href="/home/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/cnpj/' %}active{% endif %}" href="/cnpj/">Pesquisa</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/busca_avancada/' %}active{% endif %}" href="/busca_avancada/">Pesquisa Avançada</a>
+        </li>
+    </ul>
+    <div>
+        {% block content %}
+            <p>Página home de teste</p>
+        {% endblock %}
+    </div>
 </body>
 </html>
