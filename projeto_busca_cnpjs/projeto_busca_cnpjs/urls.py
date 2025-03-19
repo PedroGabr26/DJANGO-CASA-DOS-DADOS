@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from app_busca_cnpjs import views
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,5 +23,7 @@ urlpatterns = [
     path('create/', views.create_user,name='create_user'),
     path('home/',views.home,name='home'),
     path('cnpj/',views.busca_cnpj,name='cnpj'),
-    path('busca_avancada/',views.BuscaAvancadaView.as_view(),name='busca_avancada')
+    path('busca_avancada/',views.BuscaAvancadaView.as_view(),name='busca_avancada'),
+    path('',include('app_buscar_cnpjs.urls')),
+    path('check_email/',views.CheckEmailUser.as_view(),name='check_email')
 ]

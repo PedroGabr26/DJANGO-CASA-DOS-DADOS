@@ -10,6 +10,9 @@ class CreateUsuarioForm(UserCreationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Usuario'})
     )
+    email = forms.CharField(
+        widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email'})
+    )
     password1 = forms.CharField( 
         widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Senha'})
     )
@@ -20,12 +23,13 @@ class CreateUsuarioForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(CreateUsuarioForm, self).__init__(*args, **kwargs)
         self.fields['username'].label = ''
+        self.fields['email'].label = ''
         self.fields['password1'].label = ''
         self.fields['password2'].label = ''
 
     class Meta:
         model = User
-        fields = ['username','password1','password2']
+        fields = ['username','email','password1','password2']
     
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -37,7 +41,7 @@ class CreateUsuarioForm(UserCreationForm):
 
 
 #formulario de autentitcação de usuario
-class AuthenticateUsuarioForm(AuthenticationForm):
+class AuthenticateUsuarioForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Usuario'})
     )
