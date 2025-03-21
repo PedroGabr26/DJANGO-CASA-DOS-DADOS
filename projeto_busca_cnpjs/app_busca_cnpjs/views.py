@@ -199,7 +199,6 @@ class BuscaAvancadaView(LoginRequiredMixin,ListView):
         # context['form'] = CreateFormBuscaAvancada(self.request.GET)
         # return context
 
-logger = logging.getLogger(__name__)
 
 # já tem que renderizar a página ao acessar ela
 class CheckEmailUser(generics.RetrieveAPIView):
