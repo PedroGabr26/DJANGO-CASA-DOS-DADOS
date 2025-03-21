@@ -9,12 +9,13 @@ import requests
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from .utils import verificar_whatsapp
-from django.contrib.auth import get_user_model
-from serializers import UserSerializer
+from django.contrib.auth.models import User
+from .serializers import UserSerializer
 from rest_framework import generics,status
 from django.shortcuts import get_object_or_404
 from app_busca_cnpjs.utils import generate_link,email_reset_password
 from rest_framework.response import Response
+import logging
 # Create your views here.
 
 def authenticate_user(request):
@@ -39,22 +40,24 @@ def authenticate_user(request):
 def create_user(request):
     if request.method == "POST":
         form = CreateUsuarioForm(request.POST)
+        email = form.cleaned_data['email']
         if form.is_valid():
             form.save()
             messages.success(request,'Usuário criado com sucesso!')
             return redirect('/')
     else:
         form = CreateUsuarioForm()
-        form.add_error(None, "Senha muito curta!\nDeve conter pelo menos 8 caracteres")
         print(form.errors)
     return render(request,'cadastro.html', {'form':form})
 
+
+# def redefinir_senha(request):
+#     return render(request,'check_email.html')
 
 
 @login_required
 def home(request):
     return render(request,'home.html')
-
 
 
 @login_required
@@ -196,24 +199,32 @@ class BuscaAvancadaView(LoginRequiredMixin,ListView):
         # context['form'] = CreateFormBuscaAvancada(self.request.GET)
         # return context
 
+logger = logging.getLogger(__name__)
 
-User = get_user_model()
+# já tem que renderizar a página ao acessar ela
 class CheckEmailUser(generics.RetrieveAPIView):
-    def get(self,request,email):
-        if User.objects.filter(email=email).exists():
-            to_email = email
-            user = get_object_or_404()
-            link = generate_link(user)
-            if to_email and link:
-                generate_link(user)
-                email_reset_password(to_email,link)
-                return Response({'messagem-enviada':True},status=status.HTTP_200_OK)
+    def get(self,request,*args,**kwargs):
+        if request.method == "GET":
+            email = request.GET.get('email')
+            logger.info(f"Email recebido: {email}")  # Log para verificar o valor
+            print(f"Email recebido: {email}")
+            if email:
+                if User.objects.filter(email=email).first(): # Não dava pra tirar o email e fazer a busca só pelo filtro ?
+                    to_email = email
+                    user = get_object_or_404(User,email=email)
+                    link = generate_link(user)
+                    if to_email and link:
+                        logger.info(f"Enviando email para: {to_email}, link: {link}")
+                        print(f"Enviando email para: {to_email}, link: {link}")
+                        email_reset_password(to_email,link)
+                        # mudar a messagem de email enviado pro usuario
+                        return Response({'messagem-enviada':True},status=status.HTTP_200_OK)
+                else:
+                    return Response({'exists':False},status=status.HTTP_404_NOT_FOUND)
+            return render(request,'check_email.html')
         else:
-            return Response({'exists':False},status=status.HTTP_404_NOT_FOUND)
-
-
+            return redirect('check_email')
                 
-
 
 
 

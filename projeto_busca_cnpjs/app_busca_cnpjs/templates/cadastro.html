@@ -19,8 +19,7 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Enviar</button>
-            <!-- Register buttons -->
+            <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Criar</button>
             <div class="text-center">
             <p>Já possui usuário? <a href="{% url 'login' %}">Login</a></p>
         </form>

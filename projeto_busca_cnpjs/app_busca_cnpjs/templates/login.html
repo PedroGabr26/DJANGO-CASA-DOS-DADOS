@@ -23,6 +23,7 @@
             <!-- Register buttons -->
             <div class="text-center">
             <p>Não tem usuário? <a href="{% url 'create_user' %}">Cadastre-se</a></p>
+            <p>Esqueceu a senha? <a href="{% url 'check_email' %}">Redefinir Senha</a></p>
             {% if messages %}
                 <ul>
                     {% for message in messages %}

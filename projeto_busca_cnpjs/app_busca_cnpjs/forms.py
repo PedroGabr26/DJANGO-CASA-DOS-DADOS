@@ -49,9 +49,6 @@ class AuthenticateUsuarioForm(forms.Form):
         widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Senha'})
     )
 
-
-
-
 #formulario de consultar um cnpj por vez
 class CreateFormCnpj(forms.ModelForm):
     class Meta:

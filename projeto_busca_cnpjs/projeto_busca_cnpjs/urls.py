@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from app_busca_cnpjs import views
+from django.contrib.auth import views as auth_views
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.authenticate_user,name='login'),
@@ -24,6 +27,8 @@ urlpatterns = [
     path('home/',views.home,name='home'),
     path('cnpj/',views.busca_cnpj,name='cnpj'),
     path('busca_avancada/',views.BuscaAvancadaView.as_view(),name='busca_avancada'),
-    path('',include('app_buscar_cnpjs.urls')),
-    path('check_email/',views.CheckEmailUser.as_view(),name='check_email')
+    path('',include('app_busca_cnpjs.urls')),
+    path('check-email/',views.CheckEmailUser.as_view(),name='check_email'),
+    path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'), # funcionando
+    path('reset-complete-password/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete')
 ]
