@@ -29,6 +29,6 @@ urlpatterns = [
     path('busca_avancada/',views.BuscaAvancadaView.as_view(),name='busca_avancada'),
     path('',include('app_busca_cnpjs.urls')),
     path('check-email/',views.CheckEmailUser.as_view(),name='check_email'),
-    path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'), # funcionando
-    path('reset-complete-password/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete')
+    path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'),name='password_reset_confirm'), # funcionando
+    path('reset-complete-password/',auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'),name='password_reset_complete')
 ]
